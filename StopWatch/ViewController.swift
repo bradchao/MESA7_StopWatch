@@ -18,13 +18,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var btnStartOrStop: UIButton!
     @IBOutlet weak var btnLapOrReset: UIButton!
     private var isStart = false
+    private var laps:Array<String> = []
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return laps.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell")
+        cell?.textLabel?.text = laps[indexPath.row]
         return cell!
     }
     
@@ -64,7 +66,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
     }
     private func doLap(){
-        
+        laps += ["00:01:23.45"]
+        tableView.reloadData()
     }
     
     
