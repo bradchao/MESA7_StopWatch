@@ -19,6 +19,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBOutlet weak var btnLapOrReset: UIButton!
     private var isStart = false
     private var laps:Array<String> = []
+    private var timer:Timer?
+    private var counter = 0
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return laps.count
@@ -57,29 +59,40 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
 
     private func doStart(){
-        
+        timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true, block: {(timer) in
+            self.counter += 1
+            self.showCounter()
+        })
     }
+    
+    private func showCounter(){
+        hsLabel.text =  String(counter % 100)
+        let ts = counter / 100
+        secondLabel.text = String(ts % 60)
+        let tm = ts / 60
+        minuteLabel.text = String(tm % 60)
+        hourLabel.text = String(tm / 60)
+    }
+    
     private func doStop(){
-        
+        timer?.invalidate()
+        timer = nil
     }
     private func doReset(){
-        
+        counter = 0
+        laps = []
+        showCounter()
+        tableView.reloadData()
     }
     private func doLap(){
-        laps += ["00:01:23.45"]
+        let lapString = hourLabel.text! + ":" + minuteLabel.text! + ":" + secondLabel.text! + "." + hsLabel.text!
+        laps += [lapString]
         tableView.reloadData()
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        showCounter()
     }
 }
 
